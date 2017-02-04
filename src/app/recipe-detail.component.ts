@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 
 import { RecipeService } from './recipe.service';
+import {Ingredient} from "./ingredient";
 
 @Component({
   selector: 'ft-recipe-detail',
@@ -24,13 +25,14 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.params.subscribe(
       (params: any) => {
-        this.recipeIndex = params['id']
+        this.recipeIndex = params['id'];
         this.selectedRecipe = this.rs.getRecipes()[this.recipeIndex];
       }
     );
   }
 
   onAddToShoppingList() {
+    this.sls.addItems(this.selectedRecipe.ingredient);
   }
 
   ngOnDestroy() {
@@ -45,5 +47,4 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
     this.rs.deleteRecipe(this.selectedRecipe);
     this.router.navigate(['/recipes']);
   }
-
 }

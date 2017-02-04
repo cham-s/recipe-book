@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-xs-10">
-    <ft-shopping-list-add></ft-shopping-list-add>
+    <ft-shopping-list-add [item]="selectedItem" (cleared)="onClear()"></ft-shopping-list-add>
     <hr>
     <ul class="list-group">
-      <a class="list-group-item" style="cursor: pointer" *ngFor="let item of items">{{item.name}} ({{item.amount}})</a>
+      <a class="list-group-item" style="cursor: pointer"  *ngFor="let item of items" (click)="onSelectItem(item)">{{item.name}} ({{item.amount}})</a>
     </ul>
   </div>
 </div>
