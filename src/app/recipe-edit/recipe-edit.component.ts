@@ -3,7 +3,7 @@ import {ActivatedRoute} from "@angular/router";
 import {RecipeService} from "../recipe.service";
 import {Subscription} from "rxjs/Rx";
 import {Recipe} from "../recipe";
-import {FormArray, FormGroup, FormControl, Validators} from "@angular/forms";
+import {FormArray, FormGroup, FormControl, Validators, FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'ft-recipe-edit',
@@ -14,10 +14,12 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   private recipeIndex: number;
   private isNew = true;
   private recipe: Recipe;
+  recipeForm: FormGroup;
 
 
   constructor(private  route: ActivatedRoute,
-              private  rs: RecipeService) { }
+              private  rs: RecipeService,
+              private  fb: FormBuilder) { }
 
   ngOnInit() {
     this.subscription = this.route.params.subscribe(
@@ -30,6 +32,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           this.isNew = true;
           this.recipe = null;
         }
+        //this.initForm();
       }
     );
   }
@@ -38,7 +41,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private initForm(isNew: boolean) {
+  private initForm() {
     let recipeName = '';
     let recipeImageUrl = '';
     let recipeContent = '';
@@ -55,7 +58,16 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
             ])
           })
         );
+        recipeName = this.recipe.name;
+        recipeImageUrl = this.recipe.imagePath;
+        recipeContent = this.recipe.description;
       }
+      this.recipeForm = this.fb.group({
+        name: [recipeName, Validators.required],
+        imagePath: [recipeImageUrl, Validators.required],
+        description: [recipeContent, Validators.required],
+        ingredients: recipeIngredients
+      });
     }
   }
 
